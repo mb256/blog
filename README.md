@@ -1,2 +1,2 @@
 # blog
-Technical notes + life comments
+Personal things to be remember like technical notes, bussines ideas and all other notes
