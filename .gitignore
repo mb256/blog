@@ -3,7 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-# todo text file
+# todo text file -
 todo
 .todo.swp
 
