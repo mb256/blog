@@ -4,7 +4,7 @@ SITEURL = ''
 
 PATH = 'content'
 OUTPUT_PATH = 'output'
-THEME = '../pelican-themes/bootstrap'
+THEME = '../pelican-themes/basic'
 
 RELATIVE_URLS = True
 
@@ -15,17 +15,17 @@ TIMEZONE = 'Europe/Rome'
 DEFAULT_LANG = 'en'
 
 # Feed(s)
-FEED_ALL_ATOM = 'feeds/all.atom.xml'
-FEED_ALL_RSS = 'feeds/all.rss.xml'
-AUTHOR_FEED_RSS = 'feeds/%s.rss.xml'
-RSS_FEED_SUMMARY_ONLY = False
+#FEED_ALL_ATOM = 'feeds/all.atom.xml'
+#FEED_ALL_RSS = 'feeds/all.rss.xml'
+#AUTHOR_FEED_RSS = 'feeds/%s.rss.xml'
+#RSS_FEED_SUMMARY_ONLY = False
 
 # Feed generation is usually not desired when developing
-#FEED_ALL_ATOM = None
-#CATEGORY_FEED_ATOM = None
-#TRANSLATION_FEED_ATOM = None
-#AUTHOR_FEED_ATOM = None
-#AUTHOR_FEED_RSS = None
+FEED_ALL_ATOM = None
+CATEGORY_FEED_ATOM = None
+TRANSLATION_FEED_ATOM = None
+AUTHOR_FEED_ATOM = None
+AUTHOR_FEED_RSS = None
 
 # Blogroll
 LINKS = (('mbrouk', 'https://mbrouk.pythonanywhere.com/'),
