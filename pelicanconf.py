@@ -3,6 +3,10 @@ SITENAME = "mb256's blog"
 SITEURL = ''
 
 PATH = 'content'
+OUTPUT_PATH = 'output'
+THEME = '../pelican-themes/bootstrap'
+
+RELATIVE_URLS = True
 
 STATIC_PATHS = ['images']
 
