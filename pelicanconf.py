@@ -4,7 +4,7 @@ SITEURL = ''
 
 PATH = 'content'
 OUTPUT_PATH = 'output'
-THEME = '../pelican-themes/basic'
+THEME = '../pelican-themes/bootstrap2-dark'
 
 RELATIVE_URLS = True
 
