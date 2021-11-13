@@ -1,12 +1,11 @@
-Title: My first post
-Date: 2020-11-07 22:30
-Modified: 2020-11-07 22:30
+Title: Začínáme ...
+Date: 2021-11-13 16:55
+Modified: 2021-11-13 17:00
 Category: other
 Tags: first, other
-Slug: My-first-post
+Slug: zaciname
 Authors: mb256
-Summary: This is the first blog post 
+Summary: První článek na zkoušku.
 
-This is the *first post* from my Pelican blog. **YAY!**
-It's for testing purposes only and lets see how long it'll be live ...
+První záznam na osobním blogu, průměrného programátora před krizí středního věku a s absolutním nedostatkem času. Může zde být cokoli od technické dokumentace, přes investiční nápady, lezení a plány do zbytku života ...   
 
