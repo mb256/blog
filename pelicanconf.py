@@ -14,12 +14,6 @@ TIMEZONE = 'Europe/Rome'
 
 DEFAULT_LANG = 'en'
 
-# Feed(s)
-#FEED_ALL_ATOM = 'feeds/all.atom.xml'
-#FEED_ALL_RSS = 'feeds/all.rss.xml'
-#AUTHOR_FEED_RSS = 'feeds/%s.rss.xml'
-#RSS_FEED_SUMMARY_ONLY = False
-
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
 CATEGORY_FEED_ATOM = None
