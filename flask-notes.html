@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Začínáme ...</title>
+    <title>Flask notes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="mb256">
@@ -69,7 +69,7 @@
 						<i class="icon-folder-open icon-large"></i>akcie
 					</a>
                   </li>
-                  <li >
+                  <li class="active">
                     <a href="./category/development.html">
 						<i class="icon-folder-open icon-large"></i>development
 					</a>
@@ -79,7 +79,7 @@
 						<i class="icon-folder-open icon-large"></i>live
 					</a>
                   </li>
-                  <li class="active">
+                  <li >
                     <a href="./category/other.html">
 						<i class="icon-folder-open icon-large"></i>other
 					</a>
@@ -110,8 +110,8 @@
                         <h1>
                                 <a href=""
                                         rel="bookmark"
-                                        title="Permalink to Začínáme ...">
-                                        Začínáme ...
+                                        title="Permalink to Flask notes">
+                                        Flask notes
                                 </a>
                         </h1>
                 </header>
@@ -119,20 +119,50 @@
                 <div class="well">
 <footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2021-11-13T16:55:00+01:00">
-        <i class="icon-calendar"></i>So 13 listopadu 2021
+<abbr class="published" title="2022-01-15T22:23:00+01:00">
+        <i class="icon-calendar"></i>So 15 ledna 2022
 </abbr>
 <span class="label">By</span>
 <a href="./author/mb256.html"><i class="icon-user"></i>mb256</a>
 <span class="label">Category</span>
-<a href="./category/other.html"><i class="icon-folder-open"></i>other</a>.
+<a href="./category/development.html"><i class="icon-folder-open"></i>development</a>.
 
 
 <span class="label">Tags</span>
-	<a href="./tag/first.html"><i class="icon-tag"></i>first</a>
-	<a href="./tag/other.html"><i class="icon-tag"></i>other</a>
+	<a href="./tag/flask.html"><i class="icon-tag"></i>Flask</a>
+	<a href="./tag/web.html"><i class="icon-tag"></i>web</a>
+	<a href="./tag/python.html"><i class="icon-tag"></i>python</a>
 </footer><!-- /.post-info -->                </div>
-                <p>První záznam na osobním blogu, průměrného programátora před krizí středního věku a s absolutním nedostatkem času. Může zde být cokoli od technické dokumentace, přes investiční nápady, lezení a plány do zbytku života ...   </p>
+                <p>Setup Python virtual environment. Inside virtenv install flask framework (+ all dependencies).   </p>
+<div class="highlight"><pre><span></span><code>$ python -m pip install flask
+</code></pre></div>
+
+<p>Example of hello-world app:   </p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">welcome</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s2">&quot;Welcome to my Flask application!&quot;</span>
+</code></pre></div>
+
+<p>Set environment variables:   </p>
+<div class="highlight"><pre><span></span><code><span class="k">export</span> <span class="n">FLASK_APP</span><span class="o">=</span><span class="n">flashcards</span><span class="o">.</span><span class="n">py</span>
+<span class="k">export</span> <span class="n">FLASK_ENV</span><span class="o">=</span><span class="n">development</span>
+</code></pre></div>
+
+<p>Start Python Flask server in development mode:   </p>
+<div class="highlight"><pre><span></span><code>python -m flask run
+</code></pre></div>
+
+<p>Web page is than visible locally and you can check it in your web-browser at:</p>
+<div class="highlight"><pre><span></span><code><span class="mf">127.0.0.1</span><span class="p">:</span><span class="mf">5000</span>
+</code></pre></div>
+
+<p>or</p>
+<div class="highlight"><pre><span></span><code><span class="n">localhost</span><span class="o">:</span><span class="mi">5000</span>
+</code></pre></div>
                 </div><!-- /.entry-content -->
         </article>
 </section>
