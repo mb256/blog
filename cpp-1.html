@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>mb256's blog</title>
+    <title>C++ poznamky - na co si dat pozor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="mb256">
@@ -84,7 +84,7 @@
 						<i class="icon-folder-open icon-large"></i>other
 					</a>
                   </li>
-                  <li >
+                  <li class="active">
                     <a href="./category/tech.html">
 						<i class="icon-folder-open icon-large"></i>tech
 					</a>
@@ -104,60 +104,41 @@
     <div class="container-fluid">
       <div class="row">
         <div class="span9" id="content">
-        <div class="article">
-                <h1><a href="./actual-end-2021.html">Aktualni situace (pro budouci ohlednuti zpet)</a></h1>
-                <div class="well small"><footer class="post-info">
+<section id="content">
+        <article>
+                <header>
+                        <h1>
+                                <a href=""
+                                        rel="bookmark"
+                                        title="Permalink to C++ poznamky - na co si dat pozor">
+                                        C++ poznamky - na co si dat pozor
+                                </a>
+                        </h1>
+                </header>
+                <div class="entry-content">
+                <div class="well">
+<footer class="post-info">
 <span class="label">Date</span>
-<abbr class="published" title="2021-11-17T21:25:00+01:00">
-        <i class="icon-calendar"></i>St 17 listopadu 2021
+<abbr class="published" title="2022-02-04T20:00:00+01:00">
+        <i class="icon-calendar"></i>Pá 04 února 2022
 </abbr>
 <span class="label">By</span>
 <a href="./author/mb256.html"><i class="icon-user"></i>mb256</a>
 <span class="label">Category</span>
-<a href="./category/live.html"><i class="icon-folder-open"></i>live</a>.
+<a href="./category/tech.html"><i class="icon-folder-open"></i>tech</a>.
 
 
 <span class="label">Tags</span>
-	<a href="./tag/live.html"><i class="icon-tag"></i>live</a>
-	<a href="./tag/other.html"><i class="icon-tag"></i>other</a>
-</footer><!-- /.post-info --></div>
-                <div class="summary"><p>Popis situace v listopadu rok 2021 - hlavne pro pozdejsi zhodnoceni posunu nahoru nebo dolu.</p>
-                        <a class="btn primary xsmall" href="./actual-end-2021.html">more ...</a>
-                </div>
-        </div>
-        <hr />
-        <div class="article">
-                <h1><a href="./zaciname.html">Začínáme ...</a></h1>
-                <div class="well small"><footer class="post-info">
-<span class="label">Date</span>
-<abbr class="published" title="2021-11-13T16:55:00+01:00">
-        <i class="icon-calendar"></i>So 13 listopadu 2021
-</abbr>
-<span class="label">By</span>
-<a href="./author/mb256.html"><i class="icon-user"></i>mb256</a>
-<span class="label">Category</span>
-<a href="./category/other.html"><i class="icon-folder-open"></i>other</a>.
-
-
-<span class="label">Tags</span>
-	<a href="./tag/first.html"><i class="icon-tag"></i>first</a>
-	<a href="./tag/other.html"><i class="icon-tag"></i>other</a>
-</footer><!-- /.post-info --></div>
-                <div class="summary"><p>První článek na zkoušku.</p>
-                        <a class="btn primary xsmall" href="./zaciname.html">more ...</a>
-                </div>
-        </div>
-        <hr />
-
-        <div class="pagination">
-        <ul>
-                        <li class="prev"><a href="./index.html">&larr; Previous</a></li>
-                        <li class=""><a href="./index.html">1</a></li>
-                        <li class="active"><a href="./index2.html">2</a></li>
-                        <li class="next disabled"><a href="#">&rarr; Next</a></li>
-        </ul>
-        </div>
-
+	<a href="./tag/c.html"><i class="icon-tag"></i>C++</a>
+	<a href="./tag/cpp.html"><i class="icon-tag"></i>cpp</a>
+	<a href="./tag/development.html"><i class="icon-tag"></i>development</a>
+</footer><!-- /.post-info -->                </div>
+                <p>Pár poznámek na co se zaměřit při vývoji větší aplikace v C++ pro (pozdější referenci). Jous to věci, na které jsem narazil a nejsou třeba 100% jasné na první pohled ...   </p>
+<h3>Operátory new a delete</h3>
+<p>Zjednodušený pohled na moderní aplikační programování v C++ je ten, že operatory <code>new</code> a <code>delete</code> už nemají v moderním kódu co dělat. Preferované je využívání připravených funkcí ze standardní knihovni nebo z pomocných knihoven. Mnoho situací, lze vyřešit pomocí kontejnerů jako <code>vector</code> v případě potřeby smart pointery <code>std::unique_ptr</code> + <code>std::make_unique</code> a méně využívaný <code>std::shared_ptr</code> + <code>std::make_shared</code>.   </p>
+                </div><!-- /.entry-content -->
+        </article>
+</section>
         </div><!--/span-->
 
                 <div class="span3 well sidebar-nav" id="sidebar">
