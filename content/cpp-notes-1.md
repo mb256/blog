@@ -54,4 +54,76 @@ T(const &T) = delete;
 T& operator=(const &T) = delete;
 ```
 
+### Kopírovací konstruktor
 
+Často se řeší pomocí:   
+- Test na self-assignement
+- Zavolání destruktoru
+- Volání 'new' a konstruktor
+
+Tzn. správný postup je nejprve alokovat temporrary buffer (potřebnou paměť) a až poté uvolnit tu původní!   
+
+Přiřazovací operátor je často implementován podobně jako kopírovací konstruktor. Musí tam být test na na self-assignement.   
+
+
+### Vyjímky
+
+Při programování s vyjímkami pozor na exit path a na dealokaci zdrojů a uvolnění stavu.    
+Konstruktor pokud alokuje paměť, může vyhazovat vyjímku.   
+Destruktor nesmí vyhazovat vyjímku.    
+
+### Zastínění názvů
+
+Stejně jako funguje zastínění názvů proměnných, funguje i zastínění funkcí. Pak je nutné použít globální scope např. '::nazev_promenne'.
+
+
+### Copy elision
+
+Od C++17. Optimalizace "copy elision" nem;6e fungovat pokud existuje v9ce exit paths.   
+
+
+### Move-konstruktor + R-value a L-value
+
+Situace byla jednodušíí před C++11 ('komplikace' přicházejí s C++11 a pozdějími verzemi).
+- L-value je pojmenovaná reference (jako by proměnná) 
+- R-value je dočasná 'temp' hodnota. Nenexistuje na ni reference (není pojmenovaná proměnná).
+
+```C++
+void test(int&) {}      // Vola se pro L-value
+void test(int&&) {}     // Vola se pro R-value
+```
+
+Např.
+```C++
+int x = 0;
+
+test(x);        // Vola L-value funkci test(int&)
+test(x + 1);    // Vola R-value funkci test(int&&)
+```
+
+### Move
+
+Funkce move() vynutí `cast` a znamen8 to, že hodnotu proměnné `zdočasním`. Potom co se zavolá move() na proměnnou, tak se už ta proměnná nedá použít.   
+Move konstruktor je často no except (pokud ano, tak se mohou uvnitř používat pouze noexcept metody).
+
+### Pravidlo 5ti   
+
+Pokud má třída netriviální destruktor a chceme, aby podporovala move semantiku, tak musí implementovat:   
+
+- Conversion constructor
+- Copy constructor
+- Move constructor
+- Copy assignment
+- Move assignment
+
+### In class initialiser
+
+Od moderních verzí C++ je možné definovat class member proměnnou s defaultní hodnotou uvnitř header file.
+
+### Virtual methods and late binding
+
+Je možné, by rodič volal metodu přes pointer pomocí virtuální metody. Je tam lehká penalizace v run-time. Je dobré metody doplnit klíčovým slovem `override`.
+
+### Smart pointers (unique + share)
+
+todo ...
