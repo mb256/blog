@@ -136,6 +136,81 @@
                 <p>Pár poznámek na co se zaměřit při vývoji větší aplikace v C++ pro (pozdější referenci). Jous to věci, na které jsem narazil a nejsou třeba 100% jasné na první pohled ...   </p>
 <h3>Operátory new a delete</h3>
 <p>Zjednodušený pohled na moderní aplikační programování v C++ je ten, že operatory <code>new</code> a <code>delete</code> už nemají v moderním kódu co dělat. Preferované je využívání připravených funkcí ze standardní knihovni nebo z pomocných knihoven. Mnoho situací, lze vyřešit pomocí kontejnerů jako <code>vector</code> v případě potřeby smart pointery <code>std::unique_ptr</code> + <code>std::make_unique</code> a méně využívaný <code>std::shared_ptr</code> + <code>std::make_shared</code>.   </p>
+<h3>Obecné poznámky</h3>
+<p>U konstruktoru tříd preferuj "member" inicialisation místo operátoru přiřazení. <br>
+Trasuj kód jednoduše svoji implementací funkce/makra (__TRASUJ). <br>
+Pokud to není nutné, tak nepiš vlastní desktruktor. Vlastní destruktor znamená, že se jedná o netriviální destruktor a musí být pro to důvod (uvolnění zdrojů, které se neuvolňují automaticky). Pokud se implementuje netriviální destruktor, tak pak téměř vždy platí pravidlo 3 (zárověň s netriviálním destruktorem je nutné napsat vlastní kopírovací konstruktor a přiřazovací operátor). <br>
+Pokud napíšeme vlastní konstruktor, tak je automaticky definována i explicitní konverze (?).   </p>
+<h3>Static metody a atributy</h3>
+<p>Static atributy a static metody by neměly sloužit pro reportování stavu instance. Ale mají sloužit pro "komunikaci" mezi instancemi. Doporučované volání static metod je volání přes název třídy a operátor <code>::</code>., aby bylo patrné, že je to statická proměnná/metoda. Static proměnná je něco jako "globální" proměnná uvnitř třídy. Statické metody dobře slouží pro <code>začlenění kódu C (např. API z knihovny) do moderního C++ kódu</code>.</p>
+<h3>Inline metody</h3>
+<p>U inline metod není zaručeno (garantováno) "inlineování" a nelze je používat jako optimalizaci. Zároveň prodlužují dobu kompilace (vkládáním kódu).</p>
+<h3>Destruktor a vyjímky</h3>
+<p>Destruktor nesmí vyhazovat vyjímku - musí být ošetřen, tak aby žádnou vyjímku nevyhazoval. Destruktor může být volaný na základě vyhození jiné vyjímky někde jinde v programu. V C++ lze mít vuhozenou pouze jednu vyjímku (?).     </p>
+<h3>Minimální třída</h3>
+<p>Každá i prázdná třída má implicitně: <br>
+- Výchozí konstruktor <code>T()</code> <br>
+- Výchoyzí destruktor <code>~T()</code> <br>
+- Kopírovací konstruktor <code>T(const &amp;T)</code> <br>
+- Přiřazovací operátor <code>T&amp; operator=(const T&amp;)</code>   </p>
+<h3>Pravidlo 3</h3>
+<p>Při použití <code>netriviálního destruktoru</code> (musí být pro jeho implementaci důvod) se téměř vždy musí implementovat i <code>kopírovací konstruktor</code> a také <code>přiřazovací operátor</code>. <br>
+V případě potřeby (a často je to žádoucí) lze odstranit defaultní chování pomocí <code>delete</code>. <br>
+Např.: </p>
+<div class="highlight"><pre><span></span><code><span class="n">T</span><span class="p">();</span><span class="w"></span>
+<span class="o">~</span><span class="n">T</span><span class="p">();</span><span class="w"></span>
+<span class="n">T</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="o">&amp;</span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
+<span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="o">&amp;</span><span class="n">T</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">delete</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+
+<h3>Kopírovací konstruktor</h3>
+<p>Často se řeší pomocí: <br>
+- Test na self-assignement
+- Zavolání destruktoru
+- Volání 'new' a konstruktor</p>
+<p>Tzn. správný postup je nejprve alokovat temporrary buffer (potřebnou paměť) a až poté uvolnit tu původní!   </p>
+<p>Přiřazovací operátor je často implementován podobně jako kopírovací konstruktor. Musí tam být test na na self-assignement.   </p>
+<h3>Vyjímky</h3>
+<p>Při programování s vyjímkami pozor na exit path a na dealokaci zdrojů a uvolnění stavu.  <br>
+Konstruktor pokud alokuje paměť, může vyhazovat vyjímku. <br>
+Destruktor nesmí vyhazovat vyjímku.    </p>
+<h3>Zastínění názvů</h3>
+<p>Stejně jako funguje zastínění názvů proměnných, funguje i zastínění funkcí. Pak je nutné použít globální scope např. '::nazev_promenne'.</p>
+<h3>Copy elision</h3>
+<p>Od C++17. Optimalizace "copy elision" nem;6e fungovat pokud existuje v9ce exit paths.   </p>
+<h3>Move-konstruktor + R-value a L-value</h3>
+<p>Situace byla jednodušíí před C++11 ('komplikace' přicházejí s C++11 a pozdějími verzemi).
+- L-value je pojmenovaná reference (jako by proměnná) 
+- R-value je dočasná 'temp' hodnota. Nenexistuje na ni reference (není pojmenovaná proměnná).</p>
+<div class="highlight"><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w">      </span><span class="c1">// Vola se pro L-value</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;&amp;</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span><span class="w">     </span><span class="c1">// Vola se pro R-value</span>
+</code></pre></div>
+
+<p>Např.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">test</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w">        </span><span class="c1">// Vola L-value funkci test(int&amp;)</span>
+<span class="n">test</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w">    </span><span class="c1">// Vola R-value funkci test(int&amp;&amp;)</span>
+</code></pre></div>
+
+<h3>Move</h3>
+<p>Funkce move() vynutí <code>cast</code> a znamen8 to, že hodnotu proměnné <code>zdočasním</code>. Potom co se zavolá move() na proměnnou, tak se už ta proměnná nedá použít. <br>
+Move konstruktor je často no except (pokud ano, tak se mohou uvnitř používat pouze noexcept metody).</p>
+<h3>Pravidlo 5ti</h3>
+<p>Pokud má třída netriviální destruktor a chceme, aby podporovala move semantiku, tak musí implementovat:   </p>
+<ul>
+<li>Conversion constructor</li>
+<li>Copy constructor</li>
+<li>Move constructor</li>
+<li>Copy assignment</li>
+<li>Move assignment</li>
+</ul>
+<h3>In class initialiser</h3>
+<p>Od moderních verzí C++ je možné definovat class member proměnnou s defaultní hodnotou uvnitř header file.</p>
+<h3>Virtual methods and late binding</h3>
+<p>Je možné, by rodič volal metodu přes pointer pomocí virtuální metody. Je tam lehká penalizace v run-time. Je dobré metody doplnit klíčovým slovem <code>override</code>.</p>
+<h3>Smart pointers (unique + share)</h3>
+<p>todo ...</p>
                 </div><!-- /.entry-content -->
         </article>
 </section>

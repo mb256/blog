@@ -1,7 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>mb256's blog - tech</title><link href="/" rel="alternate"></link><link href="feeds/tech.atom.xml" rel="self"></link><id>/</id><updated>2022-02-04T20:00:00+01:00</updated><entry><title>C++ poznamky - na co si dat pozor</title><link href="cpp-1.html" rel="alternate"></link><published>2022-02-04T20:00:00+01:00</published><updated>2022-02-04T20:00:00+01:00</updated><author><name>mb256</name></author><id>tag:None,2022-02-04:cpp-1.html</id><summary type="html">&lt;p&gt;Poznámky na co si dát pozor při vývoji aplikace v C++ (C++11 a novější).&lt;/p&gt;</summary><content type="html">&lt;p&gt;Pár poznámek na co se zaměřit při vývoji větší aplikace v C++ pro (pozdější referenci). Jous to věci, na které jsem narazil a nejsou třeba 100% jasné na první pohled ...   &lt;/p&gt;
 &lt;h3&gt;Operátory new a delete&lt;/h3&gt;
-&lt;p&gt;Zjednodušený pohled na moderní aplikační programování v C++ je ten, že operatory &lt;code&gt;new&lt;/code&gt; a &lt;code&gt;delete&lt;/code&gt; už nemají v moderním kódu co dělat. Preferované je využívání připravených funkcí ze standardní knihovni nebo z pomocných knihoven. Mnoho situací, lze vyřešit pomocí kontejnerů jako &lt;code&gt;vector&lt;/code&gt; v případě potřeby smart pointery &lt;code&gt;std::unique_ptr&lt;/code&gt; + &lt;code&gt;std::make_unique&lt;/code&gt; a méně využívaný &lt;code&gt;std::shared_ptr&lt;/code&gt; + &lt;code&gt;std::make_shared&lt;/code&gt;.   &lt;/p&gt;</content><category term="tech"></category><category term="C++"></category><category term="cpp"></category><category term="development"></category></entry><entry><title>Blog howto (Pelican + github pages)</title><link href="pelican-github-workflow.html" rel="alternate"></link><published>2021-11-20T12:20:00+01:00</published><updated>2021-11-20T13:00:00+01:00</updated><author><name>mb256</name></author><id>tag:None,2021-11-20:pelican-github-workflow.html</id><summary type="html">&lt;p&gt;How to make free blog on github with Pelican (static site generator).&lt;/p&gt;</summary><content type="html">&lt;p&gt;I was looking for blog platform for quite a long time before I give it to try &lt;a href="https://github.com/getpelican/pelican"&gt;Pelican&lt;/a&gt; generator (other &lt;a href="https://blog.getpelican.com"&gt;link&lt;/a&gt;). Pelican is static html content generator and via this tool there is possible to generate html and hosts them on gihub &lt;a href="https://pages.github.com"&gt;pages&lt;/a&gt;.   &lt;/p&gt;
+&lt;p&gt;Zjednodušený pohled na moderní aplikační programování v C++ je ten, že operatory &lt;code&gt;new&lt;/code&gt; a &lt;code&gt;delete&lt;/code&gt; už nemají v moderním kódu co dělat. Preferované je využívání připravených funkcí ze standardní knihovni nebo z pomocných knihoven. Mnoho situací, lze vyřešit pomocí kontejnerů jako &lt;code&gt;vector&lt;/code&gt; v případě potřeby smart pointery &lt;code&gt;std::unique_ptr&lt;/code&gt; + &lt;code&gt;std::make_unique&lt;/code&gt; a méně využívaný &lt;code&gt;std::shared_ptr&lt;/code&gt; + &lt;code&gt;std::make_shared&lt;/code&gt;.   &lt;/p&gt;
+&lt;h3&gt;Obecné poznámky&lt;/h3&gt;
+&lt;p&gt;U konstruktoru tříd preferuj "member" inicialisation místo operátoru přiřazení. &lt;br&gt;
+Trasuj kód jednoduše svoji implementací funkce/makra (__TRASUJ). &lt;br&gt;
+Pokud to není nutné, tak nepiš vlastní desktruktor. Vlastní destruktor znamená, že se jedná o netriviální destruktor a musí být pro to důvod (uvolnění zdrojů, které se neuvolňují automaticky). Pokud se implementuje netriviální destruktor, tak pak téměř vždy platí pravidlo 3 (zárověň s netriviálním destruktorem je nutné napsat vlastní kopírovací konstruktor a přiřazovací operátor). &lt;br&gt;
+Pokud napíšeme vlastní konstruktor, tak je automaticky definována i explicitní konverze (?).   &lt;/p&gt;
+&lt;h3&gt;Static metody a atributy&lt;/h3&gt;
+&lt;p&gt;Static atributy a static metody by neměly sloužit pro reportování stavu instance. Ale mají sloužit pro "komunikaci" mezi instancemi. Doporučované volání static metod je volání přes název třídy a operátor &lt;code&gt;::&lt;/code&gt;., aby bylo patrné, že je to statická proměnná/metoda. Static proměnná je něco jako "globální" proměnná uvnitř třídy. Statické metody dobře slouží pro &lt;code&gt;začlenění kódu C (např. API z knihovny) do moderního C++ kódu&lt;/code&gt;.&lt;/p&gt;
+&lt;h3&gt;Inline metody&lt;/h3&gt;
+&lt;p&gt;U inline metod není zaručeno (garantováno) "inlineování" a nelze je používat jako optimalizaci. Zároveň prodlužují dobu kompilace (vkládáním kódu).&lt;/p&gt;
+&lt;h3&gt;Destruktor a vyjímky&lt;/h3&gt;
+&lt;p&gt;Destruktor nesmí vyhazovat vyjímku - musí být ošetřen, tak aby žádnou vyjímku nevyhazoval. Destruktor může být volaný na základě vyhození jiné vyjímky někde jinde v programu. V C++ lze mít vuhozenou pouze jednu vyjímku (?).     &lt;/p&gt;
+&lt;h3&gt;Minimální třída&lt;/h3&gt;
+&lt;p&gt;Každá i prázdná třída má implicitně: &lt;br&gt;
+- Výchozí konstruktor &lt;code&gt;T()&lt;/code&gt; &lt;br&gt;
+- Výchoyzí destruktor &lt;code&gt;~T()&lt;/code&gt; &lt;br&gt;
+- Kopírovací konstruktor &lt;code&gt;T(const &amp;amp;T)&lt;/code&gt; &lt;br&gt;
+- Přiřazovací operátor &lt;code&gt;T&amp;amp; operator=(const T&amp;amp;)&lt;/code&gt;   &lt;/p&gt;
+&lt;h3&gt;Pravidlo 3&lt;/h3&gt;
+&lt;p&gt;Při použití &lt;code&gt;netriviálního destruktoru&lt;/code&gt; (musí být pro jeho implementaci důvod) se téměř vždy musí implementovat i &lt;code&gt;kopírovací konstruktor&lt;/code&gt; a také &lt;code&gt;přiřazovací operátor&lt;/code&gt;. &lt;br&gt;
+V případě potřeby (a často je to žádoucí) lze odstranit defaultní chování pomocí &lt;code&gt;delete&lt;/code&gt;. &lt;br&gt;
+Např.: &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="o"&gt;~&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;const&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;delete&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;operator&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;const&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="n"&gt;T&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;delete&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Kopírovací konstruktor&lt;/h3&gt;
+&lt;p&gt;Často se řeší pomocí: &lt;br&gt;
+- Test na self-assignement
+- Zavolání destruktoru
+- Volání 'new' a konstruktor&lt;/p&gt;
+&lt;p&gt;Tzn. správný postup je nejprve alokovat temporrary buffer (potřebnou paměť) a až poté uvolnit tu původní!   &lt;/p&gt;
+&lt;p&gt;Přiřazovací operátor je často implementován podobně jako kopírovací konstruktor. Musí tam být test na na self-assignement.   &lt;/p&gt;
+&lt;h3&gt;Vyjímky&lt;/h3&gt;
+&lt;p&gt;Při programování s vyjímkami pozor na exit path a na dealokaci zdrojů a uvolnění stavu.  &lt;br&gt;
+Konstruktor pokud alokuje paměť, může vyhazovat vyjímku. &lt;br&gt;
+Destruktor nesmí vyhazovat vyjímku.    &lt;/p&gt;
+&lt;h3&gt;Zastínění názvů&lt;/h3&gt;
+&lt;p&gt;Stejně jako funguje zastínění názvů proměnných, funguje i zastínění funkcí. Pak je nutné použít globální scope např. '::nazev_promenne'.&lt;/p&gt;
+&lt;h3&gt;Copy elision&lt;/h3&gt;
+&lt;p&gt;Od C++17. Optimalizace "copy elision" nem;6e fungovat pokud existuje v9ce exit paths.   &lt;/p&gt;
+&lt;h3&gt;Move-konstruktor + R-value a L-value&lt;/h3&gt;
+&lt;p&gt;Situace byla jednodušíí před C++11 ('komplikace' přicházejí s C++11 a pozdějími verzemi).
+- L-value je pojmenovaná reference (jako by proměnná) 
+- R-value je dočasná 'temp' hodnota. Nenexistuje na ni reference (není pojmenovaná proměnná).&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;test&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{}&lt;/span&gt;&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="c1"&gt;// Vola se pro L-value&lt;/span&gt;
+&lt;span class="kt"&gt;void&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nf"&gt;test&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{}&lt;/span&gt;&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="c1"&gt;// Vola se pro R-value&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Např.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kt"&gt;int&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt;&lt;/span&gt;
+
+&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="c1"&gt;// Vola L-value funkci test(int&amp;amp;)&lt;/span&gt;
+&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="c1"&gt;// Vola R-value funkci test(int&amp;amp;&amp;amp;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Move&lt;/h3&gt;
+&lt;p&gt;Funkce move() vynutí &lt;code&gt;cast&lt;/code&gt; a znamen8 to, že hodnotu proměnné &lt;code&gt;zdočasním&lt;/code&gt;. Potom co se zavolá move() na proměnnou, tak se už ta proměnná nedá použít. &lt;br&gt;
+Move konstruktor je často no except (pokud ano, tak se mohou uvnitř používat pouze noexcept metody).&lt;/p&gt;
+&lt;h3&gt;Pravidlo 5ti&lt;/h3&gt;
+&lt;p&gt;Pokud má třída netriviální destruktor a chceme, aby podporovala move semantiku, tak musí implementovat:   &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Conversion constructor&lt;/li&gt;
+&lt;li&gt;Copy constructor&lt;/li&gt;
+&lt;li&gt;Move constructor&lt;/li&gt;
+&lt;li&gt;Copy assignment&lt;/li&gt;
+&lt;li&gt;Move assignment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;In class initialiser&lt;/h3&gt;
+&lt;p&gt;Od moderních verzí C++ je možné definovat class member proměnnou s defaultní hodnotou uvnitř header file.&lt;/p&gt;
+&lt;h3&gt;Virtual methods and late binding&lt;/h3&gt;
+&lt;p&gt;Je možné, by rodič volal metodu přes pointer pomocí virtuální metody. Je tam lehká penalizace v run-time. Je dobré metody doplnit klíčovým slovem &lt;code&gt;override&lt;/code&gt;.&lt;/p&gt;
+&lt;h3&gt;Smart pointers (unique + share)&lt;/h3&gt;
+&lt;p&gt;todo ...&lt;/p&gt;</content><category term="tech"></category><category term="C++"></category><category term="cpp"></category><category term="development"></category></entry><entry><title>Blog howto (Pelican + github pages)</title><link href="pelican-github-workflow.html" rel="alternate"></link><published>2021-11-20T12:20:00+01:00</published><updated>2021-11-20T13:00:00+01:00</updated><author><name>mb256</name></author><id>tag:None,2021-11-20:pelican-github-workflow.html</id><summary type="html">&lt;p&gt;How to make free blog on github with Pelican (static site generator).&lt;/p&gt;</summary><content type="html">&lt;p&gt;I was looking for blog platform for quite a long time before I give it to try &lt;a href="https://github.com/getpelican/pelican"&gt;Pelican&lt;/a&gt; generator (other &lt;a href="https://blog.getpelican.com"&gt;link&lt;/a&gt;). Pelican is static html content generator and via this tool there is possible to generate html and hosts them on gihub &lt;a href="https://pages.github.com"&gt;pages&lt;/a&gt;.   &lt;/p&gt;
 &lt;p&gt;There are several tutorials how to install and setup Pelican project to work properly with github pages.
 For example:   &lt;/p&gt;
 &lt;ul&gt;
